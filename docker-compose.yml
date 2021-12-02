@@ -1,0 +1,34 @@
+version: '3.4'
+services:
+  db:
+    image: "postgres:9.6-alpine"
+    container_name: postgresDb
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=secret
+      - PGDATA=/var/lib/postgresql/data/pgdata
+
+  chat-app-microservice:
+    extends:
+      file: ./backend/docker-compose.yml
+      service: dev
+    container_name: chat-app-microservice
+    restart: always
+    depends_on:
+      - db
+
+  frontend:
+    extends:
+      file: ./frontend/docker-compose.yml
+      service: dev
+    container_name: chat-app-frontend
+    restart: always
+
+volumes:
+  postgres_data: null

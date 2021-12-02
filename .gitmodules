@@ -1,0 +1,6 @@
+[submodule "chat-app-microservice"]
+	path = chat-app-microservice
+	url = https://github.com/aleksPajic/chat-app-microservice.git
+[submodule "chat-app-frontend"]
+	path = chat-app-frontend
+	url = https://github.com/aleksPajic/chat-app-frontend.git
