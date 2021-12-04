@@ -1,22 +1,21 @@
 version: '3.4'
 services:
   db:
-    image: "postgres:9.6-alpine"
+    image: "postgres:10.5"
     container_name: postgresDb
-    restart: always
     ports:
       - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=postgres
+      - POSTGRES_DB=chat-app-db
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=secret
-      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      - ./sql/fill_tables.sql:/docker-entrypoint-initdb.d/fill_tables.sql
 
   chat-app-microservice:
     extends:
-      file: ./backend/docker-compose.yml
+      file: ./chat-app-microservice/docker-compose.yml
       service: dev
     container_name: chat-app-microservice
     restart: always
@@ -25,10 +24,9 @@ services:
 
   frontend:
     extends:
-      file: ./frontend/docker-compose.yml
+      file: ./chat-app-frontend/docker-compose.yml
       service: dev
     container_name: chat-app-frontend
-    restart: always
 
 volumes:
   postgres_data: null
